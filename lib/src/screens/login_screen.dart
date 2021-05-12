@@ -28,14 +28,27 @@ class _LoginScreenState extends State<LoginScreen> {
           minWidth: _width,
         ),
         child: IntrinsicHeight(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              welcomeText(),
-              // Container(margin: EdgeInsets.only(top: 30.0)),
-              loginField(context),
-            ],
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Color(0xFFE74249),
+                  Color(0xFFBB4E75),
+                ],
+                stops: [0.1,0.9]
+              )
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                welcomeText(),
+                // Container(margin: EdgeInsets.only(top: 30.0)),
+                loginField(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -162,6 +175,18 @@ class _LoginScreenState extends State<LoginScreen> {
           return Container(
             width: double.infinity,
             height: 50,
+            decoration:BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+                gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Color(0xFFE74249),
+                      Color(0xFFD55482),
+                    ],
+                    stops: [0.1,0.7]
+                )
+            ),
             child: ElevatedButton(
                 child: Text('Sign in',
                     style: TextStyle(
@@ -172,13 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ? () => Navigator.push(context,
                         MaterialPageRoute(builder: (context) => NavBarScreen()))
                     : null,
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.pinkAccent),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    )))),
+                ),
           );
         });
   }

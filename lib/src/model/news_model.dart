@@ -1,6 +1,4 @@
 class NewsModel {
-  List<dynamic> posts;
-
   int userId;
   String firstName; //frommap
   String lastName; //frommap
@@ -15,7 +13,6 @@ class NewsModel {
     this.user,
     this.lastName,
     this.firstName,
-    this.posts,
   });
 
    NewsModel.fromJson(Map<String, dynamic> json) {

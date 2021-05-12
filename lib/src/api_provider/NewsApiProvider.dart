@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../model/news_model.dart';
 
-class NewsContoller {
+class NewsApiProvider {
   final String _token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksImlhdCI6MTYyMDYxODg2MiwiZXhwIjoxNjIwNzA1MjYyfQ.aNnyztVTHeH8sKMtSCYhcrWWPDTzPM--pxB2VtzzjHo';
-
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksImlhdCI6MTYyMDgwNDg0NiwiZXhwIjoxNjIwODkxMjQ2fQ.DGqLPPpNctJnS-CXyxYgFJ013THRR0L9Kh1ZIkr7weY';
   Map<String, String> queryParamaters = {
     'limit': '10',
     'offset': '0',
     'maxDate': '2021-05-06T18:26:42.820994'
   };
 
-  Future<List<NewsModel>> getNews() async {
+  Future <List<NewsModel>> getNews() async {
     final response = await http.get(
         Uri.https('app.ferfit.club', 'api/feed', queryParamaters),
         headers: {
@@ -26,11 +25,12 @@ class NewsContoller {
 
       Map<String, dynamic> results = body['result'];
       List posts = results['posts'];
-      List<NewsModel> news = posts.map((dynamic item) => NewsModel.fromJson(item)).toList();
+      List<NewsModel> news =
+          posts.map((dynamic item) => NewsModel.fromJson(item)).toList();
 
       return news;
     } else {
-      throw "Cant get posts";
+      throw Exception("Cant get posts");
     }
   }
 }

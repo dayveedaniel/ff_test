@@ -1,37 +1,23 @@
-import 'dart:convert';
-import 'dart:typed_data';
-import 'package:ff_test/src/controller/newsContoller.dart';
+import '../../bloc/news_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ff_test/src/model/news_model.dart';
 
-class NewsScreen extends StatelessWidget {
-  final NewsContoller newsContoller = NewsContoller();
 
-  String firstName = 'First Name';
-  String lastName = 'Last Name';
-  String caption = 'No Caption';
+class NewsScreen extends StatelessWidget {
+  final NewsModel newsModel = NewsModel();
 
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
         child: Center(
-            child: FutureBuilder(
-          future: newsContoller.getNews(),
+            child: StreamBuilder(
+          stream: newsBloc.news,
           builder:
-              (BuildContext context, AsyncSnapshot<List<NewsModel>> snapshot) {
+              (BuildContext context, AsyncSnapshot<NewsModel> snapshot) {
             if (snapshot.hasData) {
-              List<NewsModel> news = snapshot.data;
-              return ListView(
-                  children: news
-                      .map((NewsModel newsModel) => custom(
-                            firstName:
-                                nullChecker(newsModel.firstName, firstName),
-                            lastName: nullChecker(newsModel.lastName, lastName),
-                            caption: nullChecker(newsModel.caption, caption),
-                            photo: newsModel.photoId,
-                          ))
-                      .toList());
+              //List<NewsModel> news = snapshot.data;
+              return newsView(snapshot);
             }
 
             return Center(child: CircularProgressIndicator());
@@ -41,19 +27,12 @@ class NewsScreen extends StatelessWidget {
 
   // custom card
 
-  Widget custom(
-      {String firstName,
-      String lastName,
-      String caption,
-      String photo}) {
+  Widget newsView( AsyncSnapshot<NewsModel> snapshot) {
     /*Uint8List avatarPic;
     photo!= null?  avatarPic = base64Decode(photo): avatarPic=null;*/
 
     return Container(
-      /*decoration: photo!= null ? BoxDecoration(
-        image: DecorationImage(
-          image: MemoryImage (avatarPic)
-        )): null,*/
+      color: snapshot.data.photoId!= null ? Colors.redAccent: null,
       child: Card(
         margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
         elevation: 5,
@@ -65,14 +44,14 @@ class NewsScreen extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                title: Text(firstName + '  ' + lastName),
+                title: Text(snapshot.data.firstName + '  ' + snapshot.data.lastName),
                 leading: CircleAvatar(),
               ),
               Container(
                 margin: EdgeInsets.only(left: 50.0),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  caption,
+                  snapshot.data.caption,
                   textAlign: TextAlign.right,
                 ),
               ),
@@ -96,13 +75,5 @@ class NewsScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  // check for if string is null
-  String nullChecker(String first, String second) {
-    if (first == null) {
-      return second;
-    } else
-      return first;
   }
 }
